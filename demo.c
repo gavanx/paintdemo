@@ -85,7 +85,11 @@ void demo(TileCallback tileCallback) {
 //    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, 0.0);
 //    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 1.0);
 //    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 1.0);
-    mypaint_brush_from_string(brush, read_file("../../../tests/brushes/calligraphy.myb"));
+    const char* path = "../../../tests/brushes/calligraphy.myb";
+//    path = "../../../tests/brushes/charcoal.myb";
+//    path = "../../../tests/brushes/marker_fat.myb";
+//    path = "../../../tests/brushes/knife.myb";
+    mypaint_brush_from_string(brush, read_file(path));
 
     srand((unsigned) time(NULL));
 

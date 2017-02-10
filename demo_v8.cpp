@@ -14,6 +14,7 @@ using namespace v8;
 Persistent<Function> drawCallback;
 
 static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length) {
+    uint8_t x1, x2, x3, x4;
     for (int i = 0; i < length; i++) {
         uint32_t r, g, b, a;
 
@@ -37,10 +38,24 @@ static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length) {
         const uint32_t add_b = (1<<15)/2;
         const uint32_t add_a = (1<<15)/2;
 
-        *dst++ = (r * 255 + add_r) / (1<<15);
-        *dst++ = (g * 255 + add_g) / (1<<15);
-        *dst++ = (b * 255 + add_b) / (1<<15);
-        *dst++ = (a * 255 + add_a) / (1<<15);
+//        *dst++ = (r * 255 + add_r) / (1<<15);
+//        *dst++ = (g * 255 + add_g) / (1<<15);
+//        *dst++ = (b * 255 + add_b) / (1<<15);
+//        *dst++ = (a * 255 + add_a) / (1<<15);
+
+        x1 = (r * 255 + add_r) / (1<<15);
+        x2 = (g * 255 + add_g) / (1<<15);
+        x3 = (b * 255 + add_b) / (1<<15);
+        x4 = (a * 255 + add_a) / (1<<15);
+
+        if(x1 == 255 && x2 == 255 && x3 == 255){
+            x4 = 0;
+        }
+
+        *dst++ = x1;
+        *dst++ = x2;
+        *dst++ = x3;
+        *dst++ = x4;
     }
 }
 

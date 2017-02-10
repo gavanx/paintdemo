@@ -6,13 +6,10 @@
   </head>
   <body>
     <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
-  <div>
-    <canvas id="canvas" width="1024" height="768" style="border: 1px solid gray"></canvas>
+  <div style="position: relative">
+    <div style="position: absolute">xxxxxxxxxxxxxxx</div>
+    <canvas id="canvas_bg" width="1024" height="768" style="border: 1px solid gray"></canvas>
+    <canvas id="canvas" width="1024" height="768" style="border: 1px solid gray;position: absolute;left: 0"></canvas>
   </div>
   </body>
 
