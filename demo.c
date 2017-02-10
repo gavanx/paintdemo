@@ -49,14 +49,43 @@ static int randx(int min, int max) {
     return rand() / (float) (RAND_MAX) * (max - min) + min;
 }
 
+char * read_file(const char *path)
+{
+    long file_size = -1L;
+    FILE *file = fopen(path, "r");
+
+    if (!file) {
+        printf("could not open '%s'\n", path);
+        perror("fopen");
+        exit(1);
+    }
+
+    fseek(file , 0 , SEEK_END);
+    file_size = ftell(file);
+    rewind(file);
+
+    char *buffer = (char *)malloc(sizeof(char)*file_size);
+    size_t result = fread(buffer, 1, file_size, file);
+
+    fclose(file);
+
+    if (!result) {
+        free(buffer);
+        return NULL;
+    }
+    return buffer;
+}
+
+
 void demo(TileCallback tileCallback) {
     MyPaintBrush *brush = mypaint_brush_new();
     MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(1024, 768);
 
-    mypaint_brush_from_defaults(brush);
-    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, 0.0);
-    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 1.0);
-    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 1.0);
+//    mypaint_brush_from_defaults(brush);
+//    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, 0.0);
+//    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 1.0);
+//    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 1.0);
+    mypaint_brush_from_string(brush, read_file("../../../tests/brushes/calligraphy.myb"));
 
     srand((unsigned) time(NULL));
 
