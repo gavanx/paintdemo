@@ -12,7 +12,6 @@ static void stroke_to(MyPaintBrush *brush, MyPaintSurface *surf, float x, float 
     mypaint_brush_stroke_to(brush, surf, x, y, pressure, xtilt, ytilt, dtime);
 }
 
-typedef void (*TileCallback)(uint16_t *chunk, int x, int y, int tile_size, void *user_data);
 
 static void iterate_chunks(MyPaintTiledSurface *tiled_surface, MyPaintRectangle *roi, TileCallback callback, void *user_data) {
     const int tile_size = tiled_surface->tile_size;
@@ -45,7 +44,7 @@ static void tile_callback(uint16_t *chunk, int x, int y, int tile_size, void *us
     canvas_put_data(chunk, x, y, tile_size);
 }
 
-void demo() {
+void demo(TileCallback tileCallback) {
     MyPaintBrush *brush = mypaint_brush_new();
     MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(500, 500);
 
@@ -81,7 +80,7 @@ void demo() {
     //TODO: 2.tile_request tiles
     //TODO: 3.draw dirty tile buf
     canvas_init(w, h);
-    iterate_chunks((MyPaintTiledSurface *) surface, &roi, tile_callback, NULL);
+    iterate_chunks((MyPaintTiledSurface *) surface, &roi, tileCallback, NULL);
     canvas_write_to_png("output_canvas.png");
     canvas_destroy();
 
