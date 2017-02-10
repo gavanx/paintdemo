@@ -13,15 +13,14 @@ using namespace v8;
 
 Persistent<Function> drawCallback;
 
-static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length)
-{
+static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length) {
     for (int i = 0; i < length; i++) {
         uint32_t r, g, b, a;
 
-        r = *src;
-        g = *src;
-        b = *src;
-        a = *src;
+        r = *src++;
+        g = *src++;
+        b = *src++;
+        a = *src++;
 
         // un-premultiply alpha (with rounding)
         if (a != 0) {
@@ -52,9 +51,9 @@ static void tile_callback(uint16_t *chunk, int x, int y, int tile_size, void *us
     const unsigned argc = 4;
     const int size = tile_size * tile_size * 4;
     uint8_t chunk_8bit[size];
-//    fix15_to_rgba8(chunk, chunk_8bit, size);
+    fix15_to_rgba8(chunk, chunk_8bit, size / 4);
     Local<Value> argv[argc] = {
-            Nan::NewBuffer((char*)chunk, size).ToLocalChecked(),
+            Nan::NewBuffer((char*)chunk_8bit, size).ToLocalChecked(),
             Integer::New(isolate, x * tile_size),
             Integer::New(isolate, y * tile_size),
             Integer::New(isolate, tile_size)

@@ -33,7 +33,7 @@ static void iterate_chunks(MyPaintTiledSurface *tiled_surface, MyPaintRectangle 
         }
         for (int tx = txb; tx <= txe; tx++) {
             mypaint_tiled_surface_tile_request_end(tiled_surface, &requests[tx]);
-            callback(requests[tx - txe].buffer, tx, ty, tile_size, user_data);
+            callback(requests[tx - txb].buffer, tx, ty, tile_size, user_data);
         }
     }
     free(requests);
@@ -46,29 +46,29 @@ static void tile_callback(uint16_t *chunk, int x, int y, int tile_size, void *us
 
 void demo(TileCallback tileCallback) {
     MyPaintBrush *brush = mypaint_brush_new();
-    MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(500, 500);
+    MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(1024, 768);
 
     mypaint_brush_from_defaults(brush);
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, 0.0);
-    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 0.0);
-    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 0.0);
+    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 1.0);
+    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 1.0);
 
     /* Draw a rectangle on surface with brush */
     mypaint_surface_begin_atomic((MyPaintSurface *) surface);
-//    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 0.0);
-//    stroke_to(brush, (MyPaintSurface *)surface, 20.0, 0.0);
-//    stroke_to(brush, (MyPaintSurface *)surface, 20.0, 20.0);
-//    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 20.0);
-//    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 0.0);
+    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 0.0);
+    stroke_to(brush, (MyPaintSurface *)surface, 200.0, 0.0);
+    stroke_to(brush, (MyPaintSurface *)surface, 200.0, 200.0);
+    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 200.0);
+    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 0.0);
 
-//    stroke_to(brush, (MyPaintSurface *) surface, 10.0, 10.0);
-//    for (int i = 11; i < 200; i++) {
-//        stroke_to(brush, (MyPaintSurface *) surface, i, i + 1);
-//    }
-
-    for (int i = 10; i < 50; i+=2) {
-        stroke_to(brush, (MyPaintSurface *) surface, i, i);
+    stroke_to(brush, (MyPaintSurface *) surface, 10.0, 10.0);
+    for (int i = 11; i < 900; i++) {
+        stroke_to(brush, (MyPaintSurface *) surface, i, i + 1);
     }
+
+//    for (int i = 10; i < 50; i+=1) {
+//        stroke_to(brush, (MyPaintSurface *) surface, i, i);
+//    }
 
     MyPaintRectangle roi;
     mypaint_surface_end_atomic((MyPaintSurface *) surface, &roi);
