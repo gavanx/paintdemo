@@ -6,6 +6,7 @@
 
 #include "canvas.h"
 #include "demo.h"
+#include <time.h>
 
 static void stroke_to(MyPaintBrush *brush, MyPaintSurface *surf, float x, float y) {
     float pressure = 1.0, ytilt = 0.0, xtilt = 0.0, dtime = 1.0 / 10;
@@ -44,6 +45,10 @@ static void tile_callback(uint16_t *chunk, int x, int y, int tile_size, void *us
     canvas_put_data(chunk, x, y, tile_size);
 }
 
+static int randx(int min, int max) {
+    return rand() / (float) (RAND_MAX) * (max - min) + min;
+}
+
 void demo(TileCallback tileCallback) {
     MyPaintBrush *brush = mypaint_brush_new();
     MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(1024, 768);
@@ -53,25 +58,33 @@ void demo(TileCallback tileCallback) {
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 1.0);
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 1.0);
 
+    srand((unsigned) time(NULL));
+
     /* Draw a rectangle on surface with brush */
     mypaint_surface_begin_atomic((MyPaintSurface *) surface);
-    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 0.0);
-    stroke_to(brush, (MyPaintSurface *)surface, 200.0, 0.0);
-    stroke_to(brush, (MyPaintSurface *)surface, 200.0, 200.0);
-    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 200.0);
-    stroke_to(brush, (MyPaintSurface *)surface, 0.0, 0.0);
+    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 0.0);
+    stroke_to(brush, (MyPaintSurface *) surface, 200.0, 0.0);
+    stroke_to(brush, (MyPaintSurface *) surface, 200.0, 200.0);
+    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 200.0);
+    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 0.0);
 
     stroke_to(brush, (MyPaintSurface *) surface, 10.0, 10.0);
-    for (int i = 11; i < 900; i++) {
-        stroke_to(brush, (MyPaintSurface *) surface, i, i + 1);
+    int lastx = 11;
+    int lasty = 11;
+    while (lastx < 1024 && lasty < 768) {
+        lastx = randx(lastx - 6, lastx + 16);
+        lasty = randx(lasty - 6, lasty + 16);
+        stroke_to(brush, (MyPaintSurface *) surface, lastx, lasty);
     }
 
-//    for (int i = 10; i < 50; i+=1) {
-//        stroke_to(brush, (MyPaintSurface *) surface, i, i);
-//    }
+    for (int i = 10; i < 500; i += 1) {
+        stroke_to(brush, (MyPaintSurface *) surface, i, 500 - i);
+    }
 
     MyPaintRectangle roi;
     mypaint_surface_end_atomic((MyPaintSurface *) surface, &roi);
+
+    printf("randx %d\n", randx(2, 6));
 
     int w = surface->tiles_width * surface->parent.tile_size;
     int h = surface->tiles_height * surface->parent.tile_size;
