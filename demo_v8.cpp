@@ -7,18 +7,57 @@
 #include <node.h>
 #include <v8.h>
 #include <uv.h>
+#include <node_buffer.h>
+#include <nan.h>
 using namespace v8;
 
 Persistent<Function> drawCallback;
+
+static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length)
+{
+    for (int i = 0; i < length; i++) {
+        uint32_t r, g, b, a;
+
+        r = *src;
+        g = *src;
+        b = *src;
+        a = *src;
+
+        // un-premultiply alpha (with rounding)
+        if (a != 0) {
+            r = ((r << 15) + a/2) / a;
+            g = ((g << 15) + a/2) / a;
+            b = ((b << 15) + a/2) / a;
+        } else {
+            r = g = b = 0;
+        }
+
+        // Variant A) rounding
+        const uint32_t add_r = (1<<15)/2;
+        const uint32_t add_g = (1<<15)/2;
+        const uint32_t add_b = (1<<15)/2;
+        const uint32_t add_a = (1<<15)/2;
+
+        *dst++ = (r * 255 + add_r) / (1<<15);
+        *dst++ = (g * 255 + add_g) / (1<<15);
+        *dst++ = (b * 255 + add_b) / (1<<15);
+        *dst++ = (a * 255 + add_a) / (1<<15);
+    }
+}
 
 static void tile_callback(uint16_t *chunk, int x, int y, int tile_size, void *user_data) {
     printf("tile_callback %d, %d\n", x, y);
     Isolate *isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
-    const unsigned argc = 2;
+    const unsigned argc = 4;
+    const int size = tile_size * tile_size * 4;
+    uint8_t chunk_8bit[size];
+//    fix15_to_rgba8(chunk, chunk_8bit, size);
     Local<Value> argv[argc] = {
-            Integer::New(isolate, x),
-            Integer::New(isolate, y)
+            Nan::NewBuffer((char*)chunk, size).ToLocalChecked(),
+            Integer::New(isolate, x * tile_size),
+            Integer::New(isolate, y * tile_size),
+            Integer::New(isolate, tile_size)
     };
     Local<Function>::New(isolate, drawCallback)->Call(isolate->GetCurrentContext()->Global(), argc, argv);
 }

@@ -1,9 +1,12 @@
 {
-  "name": "electron-quick-start",
+  "name": "paintdemo",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js"
+  },
+  "devDependencies": {
+    "nan": "^2.4.0"
   }
 }

@@ -4,6 +4,7 @@
       "target_name": "demo",
       "sources": [ "../demo_v8.cpp", "../demo.c", "../canvas.c" ],
       "include_dirs": [
+              "<!(node -e \"require('nan')\")",
               "../../../",
               "/usr/include/json-c",
               "/usr/include/glib-2.0",

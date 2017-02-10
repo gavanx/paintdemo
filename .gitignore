@@ -1,3 +1,4 @@
 binding/build
 binding/output*
 binding/*.node
+binding/node_modules
