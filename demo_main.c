@@ -3,6 +3,7 @@
 //
 
 #include "demo.h"
+#include <stdio.h>
 
 static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length)
 {

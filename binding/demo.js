@@ -1,12 +1,13 @@
 var demo = require('./demo.node')
 
-var c = document.getElementById('canvas')
+var cf = document.getElementById('canvas')
 var cbg = document.getElementById('canvas_bg')
 
 function rect(c) {
     var ctx = c.getContext("2d");
-    ctx.fillStyle = "green";
-    ctx.fillRect(10, 10, 500, 500);
+    ctx.fillStyle = "#F5F5F5";
+    ctx.fillStyle = 'white'
+    ctx.fillRect(10, 10, 800, 800);
 }
 
 rect(cbg)
@@ -20,7 +21,7 @@ function copy(c) {
 
 copy(cbg)
 
-function put() {
+function put(c) {
     var ctx = c.getContext("2d");
     var imgData = ctx.createImageData(100, 100);
     for (var i = 0; i < imgData.data.length; i += 4) {
@@ -34,11 +35,24 @@ function put() {
 
 put(cbg)
 
+// rect(cf)
+// copy(cf)
+// put(cf)
+
+var btn = document.getElementById('btn')
+btn.onclick = function () {
+    console.log('btn')
+    var image = cf.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    window.location.href=image; // it will save locally
+}
+
 demo.demo(function (data, x, y, size) {
+    // if(true)return
     console.log('xxxxxxxxxx', x, y, size)
     console.log('data', data)
-    var ctx = c.getContext("2d");
+    var ctx = cf.getContext("2d");
     var imgData = ctx.createImageData(size, size);
+    // var imgData = ctx.getImageData(x, y, size, size);
     console.log('createimagedata', imgData)
     for (var i = 0; i < data.length; i+=4) {
         imgData.data[i + 0] = data[i + 0]

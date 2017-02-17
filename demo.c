@@ -81,37 +81,56 @@ void demo(TileCallback tileCallback) {
     MyPaintBrush *brush = mypaint_brush_new();
     MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(1024, 768);
 
-//    mypaint_brush_from_defaults(brush);
-//    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, 0.0);
-//    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, 1.0);
-//    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, 1.0);
-    const char* path = "../../../tests/brushes/calligraphy.myb";
+    const char* path = "/home/data/work/sharp/nw/paint/libmypaint/tests/brushes/calligraphy.myb";
 //    path = "../../../tests/brushes/charcoal.myb";
 //    path = "../../../tests/brushes/marker_fat.myb";
 //    path = "../../../tests/brushes/knife.myb";
+//    path = "../../../tests/brushes/pen.myb";
     mypaint_brush_from_string(brush, read_file(path));
+    mypaint_brush_from_defaults(brush);
+
+
+    // student: #70da65
+//    float r = 0.2902 , g = 0.5647, b = 0.8863;// teacher: #4a90e2  '0.2902', '0.5647', '0.8863'
+    float r = 1.0, g = 0.0, b = 0.0;
+    rgb_to_hsv_float(&r, &g, &b);
+
+    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, r);
+    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, g);
+    mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, b);
 
     srand((unsigned) time(NULL));
 
     /* Draw a rectangle on surface with brush */
     mypaint_surface_begin_atomic((MyPaintSurface *) surface);
-    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 0.0);
-    stroke_to(brush, (MyPaintSurface *) surface, 200.0, 0.0);
-    stroke_to(brush, (MyPaintSurface *) surface, 200.0, 200.0);
-    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 200.0);
-    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 0.0);
 
     stroke_to(brush, (MyPaintSurface *) surface, 10.0, 10.0);
+    stroke_to(brush, (MyPaintSurface *) surface, 15.0, 10.0);
+//    stroke_to(brush, (MyPaintSurface *) surface, 200.0, 200.0);
+//    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 200.0);
+//    stroke_to(brush, (MyPaintSurface *) surface, 0.0, 0.0);
+
+//    stroke_to(brush, (MyPaintSurface *) surface, 10.0, 10.0);
     int lastx = 11;
     int lasty = 11;
-    while (lastx < 1024 && lasty < 768) {
+int count = 0;
+    while (count < 1115 && lastx < 1024 && lasty < 768) {
+        count++;
         lastx = randx(lastx - 6, lastx + 16);
         lasty = randx(lasty - 6, lasty + 16);
-        stroke_to(brush, (MyPaintSurface *) surface, lastx, lasty);
+//        stroke_to(brush, (MyPaintSurface *) surface, lastx, lasty);
+    }
+
+    count = 0;
+    while (count < 1115 && lastx >0 && lasty >0) {
+        count++;
+        lastx = randx(lastx - 16, lastx + 6);
+        lasty = randx(lasty - 16, lasty + 6);
+//        stroke_to(brush, (MyPaintSurface *) surface, lastx, lasty);
     }
 
     for (int i = 10; i < 500; i += 1) {
-        stroke_to(brush, (MyPaintSurface *) surface, i, 500 - i);
+//        stroke_to(brush, (MyPaintSurface *) surface, i, 500 - i);
     }
 
     MyPaintRectangle roi;
