@@ -4,3 +4,4 @@ binding/*.node
 binding/node_modules
 output*
 demo
+brush
