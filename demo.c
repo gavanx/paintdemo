@@ -93,6 +93,7 @@ void demo(TileCallback tileCallback) {
     float r = 0.2902 , g = 0.5647, b = 0.8863;// teacher: #4a90e2  '0.2902', '0.5647', '0.8863'
 //    float r = 1.0, g = 0.0, b = 0.0;
     rgb_to_hsv_float(&r, &g, &b);
+    printf("rgb_to_hsv_float h s v %f %f %f\n", r, g, b);
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, r);
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_S, g);
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_V, b);

@@ -52,7 +52,7 @@ static void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length) {
         x4 = (a * 255 + add_a) / (1<<15);
 
         if(x1 == 255 && x2 == 255 && x3 == 255){
-            x4 = 0;
+//            x4 = 0;
         }
 
         if(x1 == 255 && x2 == 235 && x3 == 235){
@@ -191,9 +191,11 @@ static void demoV8(const v8::FunctionCallbackInfo<Value>& args) {
     demo(tile_callback);
 }
 
+#include "brush/mypaint/binding/paint_brush.h"
 static void Init(Handle<Object> exports) {
     Isolate* isolate = Isolate::GetCurrent();
     exports->Set(String::NewFromUtf8(isolate, "demo"), FunctionTemplate::New(isolate, demoV8)->GetFunction());
+    exportPaintBrush(exports);
 }
 
 

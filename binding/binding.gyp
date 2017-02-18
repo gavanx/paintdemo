@@ -2,7 +2,8 @@
   "targets": [
     {
       "target_name": "demo",
-      "sources": [ "../demo_v8.cpp", "../demo.c", "../canvas.c" ],
+      "includes": ["../brush/mypaint/binding/binding.gypi"],
+      "sources": [ "../demo_v8.cpp", "../demo.c", "../canvas.c", "../brush/mypaint/binding/paint_brush.cpp" ],
       "include_dirs": [
               "<!(node -e \"require('nan')\")",
               "../../../",
